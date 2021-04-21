@@ -2,6 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Solution",
+            "request": "launch",
+            "mainClass": "d18130149.Solution",
+            "projectName": "java"
+        },
+        {
+            "type": "java",
+            "name": "Launch GlueGenVersion",
+            "request": "launch",
+            "mainClass": "com.jogamp.common.GlueGenVersion",
+            "projectName": "java"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Main",
             "request": "launch",
             "mainClass": "ie.tudublin.Main",
