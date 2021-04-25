@@ -1,7 +1,6 @@
 package d18130149;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import ie.tudublin.*;
@@ -10,12 +9,11 @@ public class HarshsVisual extends Visual {
 
     Player p;
     int score, startTime;
-    double speed;
+    float speed;
     ArrayList<Obstacle> obstacles;
 
     public void settings() {
         size(500, 1024);
-
     }
 
     public void setup() {
@@ -29,13 +27,15 @@ public class HarshsVisual extends Visual {
 
         startTime = millis();
         p = new Player(this);
-        speed = 0.1;
+        speed = 0.1f;
+
+        rectMode(CENTER);
 
         obstacles = new ArrayList<Obstacle>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             float gap = width / (float) getBands().length;
-            Obstacle leftO = new Obstacle(this, Constants.LEFT, -(i * (gap * 6)));
-            Obstacle rightO = new Obstacle(this, Constants.RIGHT, -(i * (gap * 6)));
+            Obstacle leftO = new SideBarsObstacle(this, Constants.LEFT);
+            Obstacle rightO = new SideBarsObstacle(this, Constants.RIGHT);
             obstacles.add(leftO);
             obstacles.add(rightO);
         }
@@ -74,21 +74,37 @@ public class HarshsVisual extends Visual {
 
         ListIterator<Obstacle> itr = obstacles.listIterator();
         while (itr.hasNext()) {
-            Obstacle ob = itr.next();
+            Obstacle obstacle = itr.next();
+            if (obstacle instanceof SideBarsObstacle) {
+                SideBarsObstacle ob = (SideBarsObstacle) obstacle;
 
-            ob.render();
-            ob.move(speed);
+                ob.show();
+                ob.move(speed);
 
-            if (ob.isOffScreen()) {
+            } else {
+                SquareObstacle ob = (SquareObstacle) obstacle;
+
+                ob.show();
+                ob.rotate(speed);
+                ob.move(speed);
+
+            }
+
+            if (obstacle.isOffScreen()) {
                 itr.remove();
                 float gap = width / (float) getBands().length;
-                if (ob.placement == Constants.LEFT) {
-                    Obstacle o = new Obstacle(this, Constants.LEFT, -(gap * 6));
-                    itr.add(o);
-                } else if (ob.placement == Constants.RIGHT) {
-                    Obstacle o = new Obstacle(this, Constants.RIGHT, -(gap * 6));
-                    itr.add(o);
-                }
+
+                SquareObstacle o = new SquareObstacle(this);
+                itr.add(o);
+                // if (ob.placement == Constants.LEFT) {
+                // SideBarsObstacle o = new SideBarsObstacle(this, Constants.LEFT);
+                // o.generateAtRandomEdge();
+                // itr.add(o);
+                // } else if (ob.placement == Constants.RIGHT) {
+                // SideBarsObstacle o = new SideBarsObstacle(this, Constants.RIGHT);
+                // o.generateAtRandomEdge();
+                // itr.add(o);
+                // }
             }
         }
 

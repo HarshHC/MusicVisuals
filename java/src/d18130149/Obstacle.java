@@ -1,40 +1,45 @@
 package d18130149;
 
+import java.util.Random;
+
 import processing.core.*;
 
 public class Obstacle {
 
-    private HarshsVisual hv;
-    public String placement;
-    private float y = 0;
+    public HarshsVisual hv;
+    public float x, y;
 
-    public Obstacle(HarshsVisual hv, String placement, float startY) {
+    public Obstacle(HarshsVisual hv) {
         this.hv = hv;
-        this.placement = placement;
-        this.y = startY;
     }
 
-    public void render() {
-        float gap = hv.width / (float) hv.getBands().length;
-        hv.noStroke();
-        for (int i = 2; i < hv.getBands().length - 1; i++) {
-            if (placement == Constants.RIGHT) {
-                hv.fill(PApplet.map(i, 0, hv.getBands().length, 255, 0), 255, 255);
-                hv.rect(hv.width, y + gap * i, -hv.getSmoothedBands()[i] * 0.5f, gap);
-            } else if (placement == Constants.LEFT) {
-                hv.fill(PApplet.map(i, 0, hv.getBands().length, 255, 0), 255, 255);
-                hv.rect(0, y + gap * i, hv.getSmoothedBands()[i] * 0.4f, gap);
-            }
+    public float getX() {
+        return x;
+    }
 
-        }
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void generateAtRandomLocation() {
+        y = 10;
+        x = hv.random(10.0f, (float) (hv.width));
+    }
+
+    public boolean isOffScreen() {
+        return y >= hv.height - 10;
     }
 
     public void move(double speed) {
         y += 1 * speed;
     }
 
-    public boolean isOffScreen() {
-        return y >= hv.height - hv.width / (float) hv.getBands().length;
-
-    }
 }
