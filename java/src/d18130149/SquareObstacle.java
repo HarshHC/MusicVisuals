@@ -9,7 +9,7 @@ public class SquareObstacle extends Obstacle {
     public SquareObstacle(HarshsVisual hv) {
         super(hv);
         rotation = 0;
-        size = hv.random(40, 70);
+        size = hv.random(50, 90);
         super.generateAtRandomLocation();
     }
 
@@ -27,7 +27,7 @@ public class SquareObstacle extends Obstacle {
     }
 
     public void rotate(float speed) {
-        rotation += speed;
+        rotation += PApplet.map(speed, 0, 20, 2, 10);
     }
 
 }
