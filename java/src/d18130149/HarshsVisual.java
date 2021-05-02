@@ -48,8 +48,8 @@ public class HarshsVisual extends Visual {
             }
         }
 
-        Obstacle leftO = new SideBarsObstacle(this, Constants.LEFT, leftObstacles != rightObstacles);
-        Obstacle rightO = new SideBarsObstacle(this, Constants.RIGHT, leftObstacles != rightObstacles);
+        Obstacle leftO = new SideBarsObstacle(this, Constants.LEFT, leftObstacles, rightObstacles);
+        Obstacle rightO = new SideBarsObstacle(this, Constants.RIGHT, leftObstacles, rightObstacles);
         obstacles.add(leftO);
         obstacles.add(rightO);
 
@@ -88,8 +88,7 @@ public class HarshsVisual extends Visual {
             Obstacle obstacle = itr.next();
             if (obstacle instanceof SideBarsObstacle) {
                 SideBarsObstacle ob = (SideBarsObstacle) obstacle;
-
-                ob.show();
+                ob.show(leftObstacles, rightObstacles);
                 ob.move(speed);
 
             } else if (obstacle instanceof SquareObstacle) {
@@ -163,11 +162,11 @@ public class HarshsVisual extends Visual {
             float randomSide = Math.round(random(0, 1));
 
             if (randomSide == 0) {
-                SideBarsObstacle o = new SideBarsObstacle(this, Constants.RIGHT, leftObstacles != rightObstacles);
+                SideBarsObstacle o = new SideBarsObstacle(this, Constants.RIGHT, leftObstacles, rightObstacles);
                 rightObstacles++;
                 obstacles.add(o);
             } else if (randomSide == 1) {
-                SideBarsObstacle o = new SideBarsObstacle(this, Constants.LEFT, leftObstacles != rightObstacles);
+                SideBarsObstacle o = new SideBarsObstacle(this, Constants.LEFT, leftObstacles, rightObstacles);
                 leftObstacles++;
                 obstacles.add(o);
             }
