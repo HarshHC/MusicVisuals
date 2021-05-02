@@ -145,7 +145,7 @@ public class HarshsVisual extends Visual {
         // println(min + " -> " + avg / bands.length + " <- " + max + " = " + isBeat);
 
         if (isBeat != previousBeat) {
-            if (obstacles.size() < 10) {
+            if (obstacles.size() < map(score, 0, 2000, 0, 20)) {
                 float randomObstacle = Math.round(random(0, 1));
                 if (randomObstacle == 0) {
                     SquareObstacle o = new SquareObstacle(this);
