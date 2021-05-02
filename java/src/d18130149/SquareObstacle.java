@@ -10,6 +10,8 @@ public class SquareObstacle extends Obstacle {
         super(hv);
         rotation = 0;
         size = hv.random(50, 90);
+        colorVal = hv.random(0, 255);
+
         super.generateAtRandomLocation();
     }
 
@@ -20,14 +22,17 @@ public class SquareObstacle extends Obstacle {
         hv.translate(x, y);
         float rad = PApplet.radians(rotation);
         hv.rotate(rad);
-        hv.rect(0, 0, size, size);
+
+        hv.fill(150, colorVal, 255);
+        hv.rect(0, 0, size, size, 10);
 
         hv.popMatrix();
 
     }
 
     public void rotate(float speed) {
-        rotation += PApplet.map(speed, 0, 20, 2, 10);
+        rotation += speed;
+        // rotation += PApplet.map(speed, 0, 20, 2, 10);
     }
 
 }

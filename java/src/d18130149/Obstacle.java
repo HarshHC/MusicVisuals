@@ -1,13 +1,9 @@
 package d18130149;
 
-import java.util.Random;
-
-import processing.core.*;
-
 public class Obstacle {
 
     public HarshsVisual hv;
-    public float x, y;
+    public float x, y, colorVal;
 
     public Obstacle(HarshsVisual hv) {
         this.hv = hv;
