@@ -2,8 +2,6 @@ package d18130149;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 
 import ie.tudublin.*;
 
@@ -11,7 +9,7 @@ public class HarshsVisual extends Visual {
 
     Player player;
     int score, startTime, leftObstacles, rightObstacles;
-    float speed;
+    float speed, penalty = 0;
     boolean previousBeat = false;
     ArrayList<Obstacle> obstacles;
 
@@ -21,25 +19,32 @@ public class HarshsVisual extends Visual {
 
     public void setup() {
         surface.setResizable(true);
-        startMinim();
-        // frameRate(5);
-        // Call loadAudio to load an audio file to process
-        loadAudio("java/data/levitate.mp3");
-        getAudioPlayer().cue(0);
-        getAudioPlayer().play();
-
-        startTime = millis();
-        player = new Player(this);
-        speed = 0.1f;
 
         rectMode(CENTER);
         imageMode(CENTER);
 
-        obstacles = new ArrayList<Obstacle>();
-        initialObstacles();
+        setupAudio();
+        setupGame();
     }
 
-    public void initialObstacles() {
+    public void setupAudio() {
+        startMinim();
+        // Call loadAudio to load an audio file to process
+        loadAudio("java/data/levitate.mp3");
+        // startListening();
+        setupAudio();
+    }
+
+    public void setupGame() {
+        startTime = millis();
+        player = new Player(this);
+        speed = 0.1f;
+        obstacles = new ArrayList<Obstacle>();
+
+        generateInitialObstacles();
+    }
+
+    public void generateInitialObstacles() {
         for (int i = 0; i < 2; i++) {
             float randomObstacle = Math.round(random(0, 1));
             if (randomObstacle == 0) {
@@ -64,6 +69,7 @@ public class HarshsVisual extends Visual {
         if (key == ' ') {
             startTime = millis();
             score = 0;
+            penalty = 0;
             getAudioPlayer().cue(0);
             getAudioPlayer().play();
         }
@@ -72,9 +78,29 @@ public class HarshsVisual extends Visual {
     public void draw() {
         background(0);
 
-        score = (millis() - startTime) / 100;
-        text("Score: " + score, 50, 50);
+        updateScore();
+        readMusicInput();
 
+        // show the player and obstacles
+        player.render();
+        renderObstacles();
+
+        // update game speed
+        speed = getAmplitude() * 50;
+
+        findMusicBeats();
+        generateObstacles();
+    }
+
+    // update game score
+    public void updateScore() {
+        score = (millis() - startTime) / 100 - Math.round(penalty);
+        textSize(20);
+        text("Score: " + score, 50, 50);
+    }
+
+    // read input from Minim
+    public void readMusicInput() {
         try {
             calculateFFT();
         } catch (VisualException e) {
@@ -83,47 +109,20 @@ public class HarshsVisual extends Visual {
 
         calculateFrequencyBands();
         calculateAverageAmplitude();
+    }
 
-        player.render();
-
+    // show, update and delete game obstacles
+    public void renderObstacles() {
         ListIterator<Obstacle> itr = obstacles.listIterator();
         while (itr.hasNext()) {
-
-            Area playerBody = player.getCollisionBody();
             Obstacle obstacle = itr.next();
 
-            if (obstacle.didCollideWithPlayer(playerBody)) {
-                println("COLLISSION - - -- - - -- - - - - -!!!!");
-                startTime = millis();
-                score = 0;
-            } else {
-                println("NO COLLISSION!!!!");
-
+            // Handle collision detection and apply penalty on the score
+            if (obstacle.didCollideWithPlayer(player.getCollisionBody())) {
+                penalty += 0.2 * score;
             }
 
-            // Rectangle2D rect = playerBody.getBounds2D();
-            // fill(255, 255, 255);
-            // rect((float) rect.getX(), (float) rect.getY(), (float) rect.getWidth(),
-            // (float) rect.getHeight());
-
-            // Area obstacleBody = obstacle.getCollisionBody();
-
-            // Rectangle2D rect2 = obstacleBody.getBounds2D();
-            // fill(0, 255, 255);
-            // rect((float) rect2.getX(), (float) rect2.getY(), (float) rect2.getWidth(),
-            // (float) rect2.getHeight());
-
-            // Area overlapArea = (Area) playerBody.clone();
-            // overlapArea.intersect(obstacleBody);
-
-            // if (!overlapArea.isEmpty()) {
-            // println("COLLISSION - - -- - - -- - - - - -!!!!");
-            // startTime = millis();
-            // score = 0;
-            // } else {
-            // println("NO COLLISSION!!!!");
-            // }
-
+            // Render the different obstacle types
             if (obstacle instanceof SideBarsObstacle) {
                 SideBarsObstacle ob = (SideBarsObstacle) obstacle;
                 ob.show(leftObstacles, rightObstacles);
@@ -144,12 +143,7 @@ public class HarshsVisual extends Visual {
                 ob.move(speed);
             }
 
-            // Rectangle2D rect3 = overlapArea.getBounds2D();
-            // fill(255, 0, 0);
-            // rect((float) rect3.getX(), (float) rect3.getY(), (float) rect3.getWidth(),
-            // (float) rect3.getHeight());
-            // fill(200, 100, 200);
-
+            // delete objects off screen
             if (obstacle.isOffScreen()) {
                 itr.remove();
                 if (obstacle instanceof SideBarsObstacle) {
@@ -157,7 +151,6 @@ public class HarshsVisual extends Visual {
 
                     if (ob.placement == Constants.LEFT) {
                         leftObstacles--;
-
                     } else {
                         rightObstacles--;
                     }
@@ -165,8 +158,10 @@ public class HarshsVisual extends Visual {
             }
         }
 
-        speed = getAmplitude() * 50;
+    }
 
+    // function to find beats in music to match object generation with music
+    public void findMusicBeats() {
         float[] bands = getSmoothedBands();
         float max = Integer.MIN_VALUE;
         float min = Integer.MAX_VALUE;
@@ -186,19 +181,27 @@ public class HarshsVisual extends Visual {
         }
 
         if (isBeat != previousBeat) {
-            if (obstacles.size() < map(score, 0, 2000, 0, 20)) {
-                float randomObstacle = Math.round(random(0, 1));
-                if (randomObstacle == 0) {
-                    SquareObstacle o = new SquareObstacle(this);
-                    obstacles.add(o);
-                } else if (randomObstacle == 1) {
-                    CircleObstacle o = new CircleObstacle(this);
-                    obstacles.add(o);
-                }
-            }
+            generateObstacles();
             previousBeat = isBeat;
         }
+    }
 
+    // function to generate game obstacles
+    public void generateObstacles() {
+
+        // Generate Square and Circle obstacles, maximum based on current score
+        if (obstacles.size() < map(score, 0, 2000, 0, 20)) {
+            float randomObstacle = Math.round(random(0, 1));
+            if (randomObstacle == 0) {
+                SquareObstacle o = new SquareObstacle(this);
+                obstacles.add(o);
+            } else if (randomObstacle == 1) {
+                CircleObstacle o = new CircleObstacle(this);
+                obstacles.add(o);
+            }
+        }
+
+        // Generate Side Bar obstacles if total obstacles on screen is less than 2
         if (obstacles.size() < 2) {
             float randomSide = Math.round(random(0, 1));
 
@@ -213,4 +216,5 @@ public class HarshsVisual extends Visual {
             }
         }
     }
+
 }
