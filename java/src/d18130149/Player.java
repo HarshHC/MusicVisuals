@@ -4,29 +4,35 @@ import processing.core.*;
 
 public class Player {
 
-    HarshsVisual hv;
+    private HarshsVisual hv;
+    private PVector pos, playAreaCenter;
 
     public Player(HarshsVisual hv) {
         this.hv = hv;
+        pos = new PVector(hv.mouseX, 1000);
+        playAreaCenter = new PVector(hv.width / 2, 1000);
     }
 
     public void render() {
-        float playerY = 1000;
-
-        // if (hv.mouseY > (hv.height * 0.8)) {
-        // playerY = hv.mouseY;
-        // } else {
-        playerY = PApplet.map((float) hv.mouseY, (float) (hv.height * 0.2), (float) (hv.height * 0.75),
+        pos.x = hv.mouseX;
+        pos.y = PApplet.map((float) hv.mouseY, (float) (hv.height * 0.2), (float) (hv.height * 0.75),
                 (float) (hv.height * 0.8), (float) (hv.height * 0.9));
 
-        // }
+        hv.pushMatrix();
+        hv.translate(pos.x, pos.y);
 
-        hv.ellipse(hv.mouseX, playerY, 50, 50);
-        // mv.colorMode(PApplet.HSB);
-        // for (int i = 0; i < mv.getAudioBuffer().size(); i++) {
-        // mv.stroke(PApplet.map(i, 0, mv.getAudioBuffer().size(), 0, 255), 255, 255);
+        float angle = PVector.angleBetween(pos, playAreaCenter);
 
-        // mv.line(i, cy, i, cy + cy * mv.getAudioBuffer().get(i));
-        // }
+        if (hv.mouseX < hv.width / 2) {
+            angle *= -1;
+        }
+
+        float rad = PApplet.radians(angle * 30);
+        hv.rotate(rad);
+
+        hv.triangle(0, -50, -25, 0, 25, 0);
+
+        hv.popMatrix();
+
     }
 }

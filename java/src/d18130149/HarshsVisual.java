@@ -31,6 +31,7 @@ public class HarshsVisual extends Visual {
         speed = 0.1f;
 
         rectMode(CENTER);
+        imageMode(CENTER);
 
         obstacles = new ArrayList<Obstacle>();
         initialObstacles();
