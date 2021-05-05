@@ -3,7 +3,6 @@ package d18130149;
 import processing.core.PApplet;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
-import java.awt.geom.Rectangle2D;
 
 public class SideBarsObstacle extends Obstacle {
     public String placement;
@@ -20,12 +19,11 @@ public class SideBarsObstacle extends Obstacle {
     }
 
     public void show(int left, int right) {
-        // hv.rectMode(PApplet.CORNER);
 
         this.left = left;
         this.right = right;
         hv.noStroke();
-        // float size = oneSided ? 1.2f : 0.5f;
+
         float gap = hv.width / (float) hv.getBands().length;
 
         for (int i = 2; i < hv.getBands().length - 1; i++) {
@@ -40,24 +38,12 @@ public class SideBarsObstacle extends Obstacle {
             if (placement == Constants.RIGHT) {
                 hv.fill(PApplet.map(i, 0, hv.getBands().length, 255, 0), colorVal, 255);
                 hv.rect(hv.width, pos.y + gap * i, -bandValue * (oneSided ? 1.2f : 0.6f), gap, 5);
-
-                RoundRectangle2D.Float rectBody = new RoundRectangle2D.Float(hv.width, pos.y + gap * i,
-                        -bandValue * (oneSided ? 1.2f : 0.6f), gap, 5, 5);
-
-                Area rectArea = new Area(rectBody);
-
             } else if (placement == Constants.LEFT) {
                 hv.fill(PApplet.map(i, 0, hv.getBands().length, 255, 0), colorVal, 255);
                 hv.rect(0, pos.y + gap * i, bandValue * (oneSided ? 1.5f : 0.8f), gap, 5);
-
-                RoundRectangle2D.Float rectBody = new RoundRectangle2D.Float(hv.width, pos.y + gap * i,
-                        -bandValue * (oneSided ? 1.2f : 0.6f), gap, 5, 5);
-
-                Area rectArea = new Area(rectBody);
             }
 
         }
-        // hv.rectMode(PApplet.CENTER);
     }
 
     public void generateAtRandomEdge() {
@@ -67,12 +53,8 @@ public class SideBarsObstacle extends Obstacle {
     @Override
     public Area getCollisionBody() {
 
-        // hv.rectMode(PApplet.CENTER);
-
-        // float bandValue = hv.getSmoothedBands()[2];
-        float gap = hv.width / (float) hv.getBands().length;
-
         Area area = new Area();
+        float gap = hv.width / (float) hv.getBands().length;
 
         for (int i = 2; i < hv.getBands().length - 1; i++) {
             float bandValue = hv.getSmoothedBands()[i];
