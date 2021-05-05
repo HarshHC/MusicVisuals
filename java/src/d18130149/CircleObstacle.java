@@ -16,7 +16,7 @@ public class CircleObstacle extends Obstacle {
 
     public void show() {
         hv.fill(150, colorVal, 255);
-        hv.ellipse(x, y, size, size);
+        hv.ellipse(pos.x, pos.y, size, size);
     }
 
     public void scale(float value) {
@@ -31,6 +31,12 @@ public class CircleObstacle extends Obstacle {
         } else {
             size -= PApplet.map(value, 0, 20, 2, 5);
         }
+    }
+
+    @Override
+    public void getCollisionBody() {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -14,7 +14,7 @@ public class SideBarsObstacle extends Obstacle {
         this.oneSided = left != right;
         this.l = left;
         this.r = right;
-        y = -400;
+        pos.y = -400;
         colorVal = hv.random(0, 255);
     }
 
@@ -37,22 +37,22 @@ public class SideBarsObstacle extends Obstacle {
 
             if (placement == Constants.RIGHT) {
                 hv.fill(PApplet.map(i, 0, hv.getBands().length, 255, 0), colorVal, 255);
-                hv.rect(hv.width, y + gap * i, -bandValue * (oneSided ? 1.2f : 0.6f), gap, 5);
+                hv.rect(hv.width, pos.y + gap * i, -bandValue * (oneSided ? 1.2f : 0.6f), gap, 5);
             } else if (placement == Constants.LEFT) {
                 hv.fill(PApplet.map(i, 0, hv.getBands().length, 255, 0), colorVal, 255);
-                hv.rect(0, y + gap * i, bandValue * (oneSided ? 1.5f : 0.8f), gap, 5);
+                hv.rect(0, pos.y + gap * i, bandValue * (oneSided ? 1.5f : 0.8f), gap, 5);
             }
 
         }
     }
 
     public void generateAtRandomEdge() {
-        y = 0;
+        pos.y = 0;
     }
 
-    // public boolean isOffScreen() {
-    // return y >= hv.height - hv.width / (float) hv.getBands().length;
+    @Override
+    public void getCollisionBody() {
 
-    // }
+    }
 
 }

@@ -2,7 +2,7 @@ package d18130149;
 
 import processing.core.*;
 
-public class Player {
+public class Player implements GameObject {
 
     private HarshsVisual hv;
     private PVector pos, playAreaCenter;
@@ -33,6 +33,11 @@ public class Player {
         hv.triangle(0, -50, -25, 0, 25, 0);
 
         hv.popMatrix();
+
+    }
+
+    @Override
+    public void getCollisionBody() {
 
     }
 }

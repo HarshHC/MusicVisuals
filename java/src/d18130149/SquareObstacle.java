@@ -1,6 +1,8 @@
 package d18130149;
 
 import processing.core.PApplet;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.AffineTransform;
 
 public class SquareObstacle extends Obstacle {
 
@@ -19,7 +21,7 @@ public class SquareObstacle extends Obstacle {
 
         hv.pushMatrix();
 
-        hv.translate(x, y);
+        hv.translate(pos.x, pos.y);
         float rad = PApplet.radians(rotation);
         hv.rotate(rad);
 
@@ -32,7 +34,15 @@ public class SquareObstacle extends Obstacle {
 
     public void rotate(float speed) {
         rotation += speed;
-        // rotation += PApplet.map(speed, 0, 20, 2, 10);
+        rotation += PApplet.map(speed, 0, 20, 2, 10);
+    }
+
+    @Override
+    public void getCollisionBody() {
+        RoundRectangle2D.Float body = new RoundRectangle2D.Float(pos.x, pos.y, size, size, 10, 10);
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(rotation, pos.x, pos.y);
+
     }
 
 }
