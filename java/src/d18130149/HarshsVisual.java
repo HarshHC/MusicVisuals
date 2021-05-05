@@ -2,12 +2,14 @@ package d18130149;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 
 import ie.tudublin.*;
 
 public class HarshsVisual extends Visual {
 
-    Player p;
+    Player player;
     int score, startTime, leftObstacles, rightObstacles;
     float speed;
     boolean previousBeat = false;
@@ -27,7 +29,7 @@ public class HarshsVisual extends Visual {
         getAudioPlayer().play();
 
         startTime = millis();
-        p = new Player(this);
+        player = new Player(this);
         speed = 0.1f;
 
         rectMode(CENTER);
@@ -49,8 +51,8 @@ public class HarshsVisual extends Visual {
             }
         }
 
-        Obstacle leftO = new SideBarsObstacle(this, Constants.LEFT, leftObstacles, rightObstacles);
-        Obstacle rightO = new SideBarsObstacle(this, Constants.RIGHT, leftObstacles, rightObstacles);
+        Obstacle leftO = new SideBarsObstacle(this, Constants.LEFT);
+        Obstacle rightO = new SideBarsObstacle(this, Constants.RIGHT);
         obstacles.add(leftO);
         obstacles.add(rightO);
 
@@ -82,11 +84,46 @@ public class HarshsVisual extends Visual {
         calculateFrequencyBands();
         calculateAverageAmplitude();
 
-        p.render();
+        player.render();
 
         ListIterator<Obstacle> itr = obstacles.listIterator();
         while (itr.hasNext()) {
+
+            Area playerBody = player.getCollisionBody();
             Obstacle obstacle = itr.next();
+
+            if (obstacle.didCollideWithPlayer(playerBody)) {
+                println("COLLISSION - - -- - - -- - - - - -!!!!");
+                startTime = millis();
+                score = 0;
+            } else {
+                println("NO COLLISSION!!!!");
+
+            }
+
+            // Rectangle2D rect = playerBody.getBounds2D();
+            // fill(255, 255, 255);
+            // rect((float) rect.getX(), (float) rect.getY(), (float) rect.getWidth(),
+            // (float) rect.getHeight());
+
+            // Area obstacleBody = obstacle.getCollisionBody();
+
+            // Rectangle2D rect2 = obstacleBody.getBounds2D();
+            // fill(0, 255, 255);
+            // rect((float) rect2.getX(), (float) rect2.getY(), (float) rect2.getWidth(),
+            // (float) rect2.getHeight());
+
+            // Area overlapArea = (Area) playerBody.clone();
+            // overlapArea.intersect(obstacleBody);
+
+            // if (!overlapArea.isEmpty()) {
+            // println("COLLISSION - - -- - - -- - - - - -!!!!");
+            // startTime = millis();
+            // score = 0;
+            // } else {
+            // println("NO COLLISSION!!!!");
+            // }
+
             if (obstacle instanceof SideBarsObstacle) {
                 SideBarsObstacle ob = (SideBarsObstacle) obstacle;
                 ob.show(leftObstacles, rightObstacles);
@@ -105,8 +142,13 @@ public class HarshsVisual extends Visual {
                 ob.show();
                 ob.scale(speed);
                 ob.move(speed);
-
             }
+
+            // Rectangle2D rect3 = overlapArea.getBounds2D();
+            // fill(255, 0, 0);
+            // rect((float) rect3.getX(), (float) rect3.getY(), (float) rect3.getWidth(),
+            // (float) rect3.getHeight());
+            // fill(200, 100, 200);
 
             if (obstacle.isOffScreen()) {
                 itr.remove();
@@ -143,8 +185,6 @@ public class HarshsVisual extends Visual {
             isBeat = false;
         }
 
-        // println(min + " -> " + avg / bands.length + " <- " + max + " = " + isBeat);
-
         if (isBeat != previousBeat) {
             if (obstacles.size() < map(score, 0, 2000, 0, 20)) {
                 float randomObstacle = Math.round(random(0, 1));
@@ -163,11 +203,11 @@ public class HarshsVisual extends Visual {
             float randomSide = Math.round(random(0, 1));
 
             if (randomSide == 0) {
-                SideBarsObstacle o = new SideBarsObstacle(this, Constants.RIGHT, leftObstacles, rightObstacles);
+                SideBarsObstacle o = new SideBarsObstacle(this, Constants.RIGHT);
                 rightObstacles++;
                 obstacles.add(o);
             } else if (randomSide == 1) {
-                SideBarsObstacle o = new SideBarsObstacle(this, Constants.LEFT, leftObstacles, rightObstacles);
+                SideBarsObstacle o = new SideBarsObstacle(this, Constants.LEFT);
                 leftObstacles++;
                 obstacles.add(o);
             }

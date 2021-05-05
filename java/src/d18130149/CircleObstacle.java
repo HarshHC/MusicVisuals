@@ -1,6 +1,8 @@
 package d18130149;
 
 import processing.core.PApplet;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 
 public class CircleObstacle extends Obstacle {
 
@@ -34,9 +36,11 @@ public class CircleObstacle extends Obstacle {
     }
 
     @Override
-    public void getCollisionBody() {
-        // TODO Auto-generated method stub
+    public Area getCollisionBody() {
+        Ellipse2D.Float body = new Ellipse2D.Float(pos.x, pos.y, size, size);
+        Area area = new Area(body);
 
+        return area;
     }
 
 }

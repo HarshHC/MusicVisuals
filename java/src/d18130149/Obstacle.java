@@ -1,12 +1,14 @@
 package d18130149;
 
 import processing.core.PVector;
+import java.awt.geom.Area;
 
 public abstract class Obstacle implements GameObject {
 
     public HarshsVisual hv;
     public PVector pos;
     public float colorVal;
+    public boolean didCollideWithPlayer = false;
 
     public Obstacle(HarshsVisual hv) {
         this.hv = hv;
@@ -40,6 +42,24 @@ public abstract class Obstacle implements GameObject {
 
     public void move(double speed) {
         pos.y += 1 * speed;
+    }
+
+    public boolean didCollideWithPlayer(Area playerBody) {
+
+        if (didCollideWithPlayer) {
+            return false;
+        } else {
+            Area overlapArea = (Area) playerBody.clone();
+            overlapArea.intersect(getCollisionBody());
+
+            if (!overlapArea.isEmpty()) {
+                didCollideWithPlayer = true;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
     }
 
 }

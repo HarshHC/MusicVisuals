@@ -1,11 +1,15 @@
 package d18130149;
 
 import processing.core.*;
+import java.awt.geom.Area;
+import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 
 public class Player implements GameObject {
 
     private HarshsVisual hv;
     private PVector pos, playAreaCenter;
+    private float rotation;
 
     public Player(HarshsVisual hv) {
         this.hv = hv;
@@ -29,6 +33,7 @@ public class Player implements GameObject {
 
         float rad = PApplet.radians(angle * 30);
         hv.rotate(rad);
+        rotation = rad;
 
         hv.triangle(0, -50, -25, 0, 25, 0);
 
@@ -37,7 +42,13 @@ public class Player implements GameObject {
     }
 
     @Override
-    public void getCollisionBody() {
+    public Area getCollisionBody() {
+        Polygon triangleBody = new Polygon();
+        triangleBody.addPoint(Math.round(pos.x + 40), Math.round(pos.y - 50));
+        triangleBody.addPoint(Math.round(pos.x + 10), Math.round(pos.y + 25));
+        triangleBody.addPoint(Math.round(pos.x + 60), Math.round(pos.y + 25));
 
+        Area area = new Area(triangleBody);
+        return area;
     }
 }
