@@ -21,17 +21,16 @@ There are 3 types of obstacles:
 # Instructions
 
 After compiling and running the code, you will be presented with the Game Menu Screen
-![Menu Screen]()
-<img src="images/menu.png" height="200" />
+<img src="images/menu.png" height="500" style="margin: 0 auto" />
 
 As mentioned on the menu, to start the game press the 'SPACE' key. The music will start the and obstacles will begin to appear. Obstacles are slow in the start as they match with the music. To move the player, simply move the mouse towards the left or right.
-![Game Start](images/gamestart.png)
+<img src="images/gamestart.png" height="500" style="margin: 0 auto" />
 
 As the game progresses, you can see the score on the top left of the screen and the text saying 'HIT' when you hit an obstacle.
-![Gameplay](images/hit.png)
+<img src="images/hit.png" height="500" style="margin: 0 auto" />
 
 As soon as the song ends, the menu appears again with your score and highscore
-![Gameplay](images/gameover.png)
+<img src="images/gameover.png" height="500" style="margin: 0 auto" />
 
 # How it works
 
