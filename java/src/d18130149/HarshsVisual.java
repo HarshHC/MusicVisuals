@@ -8,13 +8,13 @@ import processing.core.PFont;
 
 public class HarshsVisual extends Visual {
 
-    Player player;
-    PFont font;
-    int score, highscore, startTime, leftObstacles, rightObstacles;
-    float speed, penalty = 0;
-    boolean previousBeat = false;
-    boolean isGameRunning, isMenuVisible = true;
-    ArrayList<Obstacle> obstacles;
+    private Player player;
+    private PFont font;
+    private int score, highscore, startTime, leftObstacles, rightObstacles;
+    private float speed, penalty = 0;
+    private boolean previousBeat = false;
+    private boolean isGameRunning, isMenuVisible = true;
+    private ArrayList<Obstacle> obstacles;
 
     public void settings() {
         size(500, 1024);
@@ -79,7 +79,7 @@ public class HarshsVisual extends Visual {
                 startTime = millis();
                 score = 0;
                 penalty = 0;
-                getAudioPlayer().cue(2000);
+                getAudioPlayer().cue(0);
                 getAudioPlayer().play();
                 isGameRunning = true;
             } else {
@@ -132,23 +132,31 @@ public class HarshsVisual extends Visual {
     }
 
     public void showMenu() {
-
+        // background
         fill(0, 0, 0, 90);
         rect(width / 2, height / 2, 500, 1024);
+
+        // text setup
         textAlign(CENTER);
         textFont(font);
+
+        // LEVITATE title
         fill(200, 100, 255);
         textSize(55);
         text("LEVITATE!", width / 2, height * 0.2f);
 
+        // High score and score
         fill(255, 255, 255);
         textSize(40);
         text("High Score: " + highscore, width / 2, height * 0.3f);
         text("Score: " + score, width / 2, height * 0.4f);
+
+        // game info
         textSize(20);
         text("Dodge all obstacles in the way by moving\nleft and right. Each obstacle hit reduces\nthe score by 10%. Can you beat your highscore\n by the end of the song? ",
                 width / 2, height * 0.55f);
 
+        // game instructions
         text("Press 'SPACE' to start or restart the game", width / 2, height * 0.9f);
 
     }
