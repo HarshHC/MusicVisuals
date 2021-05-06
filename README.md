@@ -4,7 +4,7 @@ Name: Harsh Chandra
 
 Student Number: D18130149
 
-Video: [hyperlink](https://youtu.be/pL-fTdxcWXc)
+Video: [Demo on YouTube](https://youtu.be/pL-fTdxcWXc)
 
 # Description of the assignment
 
