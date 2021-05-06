@@ -21,7 +21,8 @@ There are 3 types of obstacles:
 # Instructions
 
 After compiling and running the code, you will be presented with the Game Menu Screen
-![Menu Screen](images/menu.png)
+![Menu Screen]()
+<img src="images/menu.png" height="200" />
 
 As mentioned on the menu, to start the game press the 'SPACE' key. The music will start the and obstacles will begin to appear. Obstacles are slow in the start as they match with the music. To move the player, simply move the mouse towards the left or right.
 ![Game Start](images/gamestart.png)
